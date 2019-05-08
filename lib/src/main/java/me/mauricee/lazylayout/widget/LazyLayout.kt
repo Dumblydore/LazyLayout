@@ -1,4 +1,4 @@
-package mauricee.me.lazylayout.lib
+package me.mauricee.lazylayout.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -13,6 +13,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.lazy_layout_error.view.*
+import me.mauricee.lazylayout.lib.R
 
 /**
  * A layout view that simplifies loading, error, and success states of a view
@@ -67,14 +68,23 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
     init {
         attrs?.run { context.obtainStyledAttributes(this, R.styleable.LazyLayout) }?.also { a ->
             @LayoutRes val loadingLayout =
-                a.getResourceId(R.styleable.LazyLayout_loadingLayout, R.layout.lazy_layout_loading)
-            @LayoutRes val errorLayout = a.getResourceId(R.styleable.LazyLayout_errorLayout, R.layout.lazy_layout_error)
+                a.getResourceId(
+                    R.styleable.LazyLayout_loadingLayout,
+                    R.layout.lazy_layout_loading
+                )
+            @LayoutRes val errorLayout = a.getResourceId(
+                R.styleable.LazyLayout_errorLayout,
+                R.layout.lazy_layout_error
+            )
             LayoutInflater.from(context).also {
                 loadingView = it.inflate(loadingLayout, this, false)
                 errorView = it.inflate(errorLayout, this, false)
             }
             displayRetryButton = a.getBoolean(R.styleable.LazyLayout_displayRetry, false)
-            state = a.getInt(R.styleable.LazyLayout_state, LOADING)
+            state = a.getInt(
+                R.styleable.LazyLayout_state,
+                LOADING
+            )
             a
         }?.recycle()
 
@@ -191,7 +201,11 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         return IntRange(0, childCount - 1).map(this::getChildAt)
     }
 
-    @IntDef(ERROR, LOADING, SUCCESS)
+    @IntDef(
+        ERROR,
+        LOADING,
+        SUCCESS
+    )
     @Retention
     private annotation class State
 

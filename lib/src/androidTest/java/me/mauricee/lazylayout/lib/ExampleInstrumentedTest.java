@@ -1,4 +1,4 @@
-package mauricee.me.lazylayout.lib;
+package me.mauricee.lazylayout.lib;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

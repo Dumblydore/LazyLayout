@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="18sp"
-            tools:text="An Error has occured"/>
+            android:text="@string/lazy_error_default"/>
 
     <Button
             android:id="@+id/lazy_error_retry"

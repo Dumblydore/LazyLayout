@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">lib</string>
     <string name="lazy_error_retry">Retry</string>
+    <string name="lazy_error_default">An Error has occured</string>
 </resources>

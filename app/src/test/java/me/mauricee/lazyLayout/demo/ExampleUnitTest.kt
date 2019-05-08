@@ -1,4 +1,4 @@
-package mauricee.me.lazyLayout.demo
+package me.mauricee.lazyLayout.demo
 
 import org.junit.Test
 
