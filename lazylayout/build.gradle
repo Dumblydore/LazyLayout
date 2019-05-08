@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: "maven"
+
+group = "com.github.DumblyDore.LazyLayout"
 
 android {
     compileSdkVersion 28
@@ -28,7 +30,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation deps.androidCore
     implementation deps.kotlinStdlib
     implementation deps.androidCompat
 

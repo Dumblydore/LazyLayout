@@ -5,7 +5,8 @@ import android.os.Handler
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import me.mauricee.lazylayout.widget.LazyLayout
+import me.mauricee.lazyLayout.LazyLayout
+
 
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 

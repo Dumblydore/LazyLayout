@@ -1,2 +1,10 @@
 # LazyLayout
-An Android Layout that simplifies Loading/Success/Error states
+A layout that simplifies Loading/Success/Error states
+
+## Binaries
+
+## Usage
+
+## Build
+
+## Feedback

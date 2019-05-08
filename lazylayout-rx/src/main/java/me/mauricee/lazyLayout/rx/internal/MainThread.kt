@@ -1,4 +1,4 @@
-package me.mauricee.lazylayout.rx.internal
+package me.mauricee.lazyLayout.rx.internal
 
 import android.os.Looper
 import androidx.annotation.RestrictTo

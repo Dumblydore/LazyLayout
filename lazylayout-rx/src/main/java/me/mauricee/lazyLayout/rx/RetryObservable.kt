@@ -1,13 +1,13 @@
 @file:JvmName("RxLazyLayout")
 
-package me.mauricee.lazylayout.rx
+package me.mauricee.lazyLayout.rx
 
 import androidx.annotation.CheckResult
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import me.mauricee.lazylayout.rx.internal.checkMainThread
-import me.mauricee.lazylayout.widget.LazyLayout
+import me.mauricee.lazyLayout.rx.internal.checkMainThread
+import me.mauricee.lazyLayout.LazyLayout
 
 @CheckResult
 fun LazyLayout.retries(): Observable<Unit> = RetryObservable(this)

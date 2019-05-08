@@ -1,4 +1,4 @@
-package me.mauricee.lazylayout.widget
+package me.mauricee.lazyLayout
 
 import android.content.Context
 import android.util.AttributeSet
@@ -10,10 +10,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.IntDef
 import androidx.annotation.LayoutRes
-import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import kotlinx.android.synthetic.main.lazy_layout_error.view.*
-import me.mauricee.lazylayout.lib.R
+
 
 /**
  * A layout view that simplifies loading, error, and success states of a view
@@ -31,9 +29,9 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
 
     var displayRetryButton: Boolean
-        get() = errorRetry?.isVisible == true
+        get() = errorRetry?.visibility == View.VISIBLE
         set(value) {
-            lazy_error_retry?.isVisible = value
+            errorRetry?.visibility = if (value) View.VISIBLE else View.GONE
         }
     var errorText: CharSequence?
         get() = errorTextView?.text
@@ -85,7 +83,6 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 R.styleable.LazyLayout_state,
                 LOADING
             )
-            a
         }?.recycle()
 
     }
@@ -100,12 +97,9 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         loadingView?.visibility = View.GONE
         errorView?.visibility = View.GONE
 
-        successView?.visibility = View.GONE
+        successView.visibility = View.GONE
 
-        lazy_error_retry?.setOnClickListener {
-            state = LOADING
-            retryListener?.onRetry()
-        }
+        errorRetry?.setOnClickListener { retryListener?.onRetry() }
         updateViewState()
     }
 
@@ -145,7 +139,7 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
                     SUCCESS -> successView
                     else -> throw RuntimeException("Invalid LazyLayout.State")
                 }) as View
-        children().firstOrNull(View::isVisible)?.let {
+        children().firstOrNull { it.visibility == View.VISIBLE }?.let {
             it.alpha = 1f
             getInactiveAnimation(it, getActiveAnimation(newActiveView))
         }?.start()
@@ -169,9 +163,9 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         val loadingView = this.loadingView as? SwipeRefreshLayout
         loadingView?.isRefreshing = state == LOADING
         if (state == SUCCESS) {
-            getInactiveAnimation(errorView!!, getActiveAnimation(successView!!)).start()
+            getInactiveAnimation(errorView!!, getActiveAnimation(successView)).start()
         } else if (state == ERROR) {
-            getInactiveAnimation(successView!!, getActiveAnimation(errorView!!)).start()
+            getInactiveAnimation(successView, getActiveAnimation(errorView!!)).start()
         }
     }
 

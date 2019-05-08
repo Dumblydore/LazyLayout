@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <me.mauricee.lazylayout.widget.LazyLayout
+    <me.mauricee.lazyLayout.LazyLayout
         android:id="@+id/lazy_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:text="Hello World!"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-    </me.mauricee.lazylayout.widget.LazyLayout>
+    </me.mauricee.lazyLayout.LazyLayout>
 
     <SeekBar
         android:id="@+id/lazy_loading_seekbar"
