@@ -30,7 +30,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(":lazylayout")
+    implementation project(':lazylayout-core')
     implementation deps.rxJava
     implementation deps.rxAndroid
     implementation deps.androidCore

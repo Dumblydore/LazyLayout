@@ -24,7 +24,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':lazylayout')
+    implementation project(':lazylayout-core')
 
     implementation deps.androidCore
     implementation deps.kotlinStdlib

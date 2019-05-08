@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LazyLayout.iml" filepath="$PROJECT_DIR$/LazyLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lazylayout/lazylayout.iml" filepath="$PROJECT_DIR$/lazylayout/lazylayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lazylayout-core/lazylayout-core.iml" filepath="$PROJECT_DIR$/lazylayout-core/lazylayout-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazylayout-rx/lazylayout-rx.iml" filepath="$PROJECT_DIR$/lazylayout-rx/lazylayout-rx.iml" />
     </modules>
   </component>

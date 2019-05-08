@@ -1,1 +1,1 @@
-include ':app', ':lazylayout', ':lazylayout-rx'
+include ':app', ':lazylayout-core', ':lazylayout-rx'
