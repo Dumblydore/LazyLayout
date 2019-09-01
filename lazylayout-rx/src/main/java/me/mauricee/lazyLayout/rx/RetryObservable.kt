@@ -1,18 +1,12 @@
-@file:JvmName("RxLazyLayout")
-
 package me.mauricee.lazyLayout.rx
 
-import androidx.annotation.CheckResult
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import me.mauricee.lazyLayout.rx.internal.checkMainThread
 import me.mauricee.lazyLayout.LazyLayout
+import me.mauricee.lazyLayout.rx.internal.checkMainThread
 
-@CheckResult
-fun LazyLayout.retries(): Observable<Unit> = RetryObservable(this)
-
-private class RetryObservable(private val lazyLayout: LazyLayout) : Observable<Unit>() {
+internal class RetryObservable(private val lazyLayout: LazyLayout) : Observable<Unit>() {
 
     override fun subscribeActual(observer: Observer<in Unit>) {
         if (!checkMainThread(observer)) {

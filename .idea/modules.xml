@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LazyLayout.iml" filepath="$PROJECT_DIR$/LazyLayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/LazyLayout-app.iml" filepath="$PROJECT_DIR$/app/LazyLayout-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lazylayout-core/LazyLayout-lazylayout-core.iml" filepath="$PROJECT_DIR$/lazylayout-core/LazyLayout-lazylayout-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lazylayout-rx/LazyLayout-lazylayout-rx.iml" filepath="$PROJECT_DIR$/lazylayout-rx/LazyLayout-lazylayout-rx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Workspace-LazyLayout.iml" filepath="$PROJECT_DIR$/Workspace-LazyLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazylayout-core/lazylayout-core.iml" filepath="$PROJECT_DIR$/lazylayout-core/lazylayout-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazylayout-rx/lazylayout-rx.iml" filepath="$PROJECT_DIR$/lazylayout-rx/lazylayout-rx.iml" />
