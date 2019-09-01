@@ -16,17 +16,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 /**
  * A layout view that simplifies loading, error, and success states of a view
  */
-class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class LazyLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
     FrameLayout(context, attrs, defStyleAttr) {
 
     @State
-    var state = LOADING
-        set(value) {
-            if (field != value) {
-                field = value
-                setState(value)
-            }
-        }
+    var state: Int
+        get() = currentState
+        set(value) = setState(value, animate = true, triggerNotify = true)
+
+    @State
+    private var currentState = LOADING
+
 
     var displayRetryButton: Boolean
         get() = errorRetry?.visibility == View.VISIBLE
@@ -63,6 +67,13 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         get() = errorView?.findViewById(R.id.lazy_error_retry)
     private lateinit var successView: View
 
+    private var startTime: Long = -1
+    private var stateChangeRunnable: Runnable? = null
+        set(value) {
+            field?.let(this::removeCallbacks)
+            field = value
+        }
+
     init {
         attrs?.run { context.obtainStyledAttributes(this, R.styleable.LazyLayout) }?.also { a ->
             @LayoutRes val loadingLayout =
@@ -79,12 +90,23 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 errorView = it.inflate(errorLayout, this, false)
             }
             displayRetryButton = a.getBoolean(R.styleable.LazyLayout_displayRetry, false)
-            state = a.getInt(
+            currentState = a.getInt(
                 R.styleable.LazyLayout_state,
                 LOADING
             )
         }?.recycle()
 
+    }
+
+
+    public override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        stateChangeRunnable?.let(::removeCallbacks)
+    }
+
+    public override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        stateChangeRunnable?.let(::removeCallbacks)
     }
 
     override fun onFinishInflate() {
@@ -110,30 +132,40 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
     fun setState(@State state: Int, animate: Boolean) = setState(state, animate, true)
 
     @Synchronized
-    private fun setState(@State state: Int, animate: Boolean = true, triggerNotify: Boolean = true) {
-        postDelayed({
+    private fun setState(
+        @State newState: Int, animate: Boolean = true,
+        triggerNotify: Boolean = true
+    ) {
+        if (currentState == newState) return
+        stateChangeRunnable = Runnable {
+            startTime = if (state == LOADING) System.currentTimeMillis() else -1L
             when {
                 loadingView is SwipeRefreshLayout -> updateSwipeRefreshViewState()
                 animate -> animateViewState()
                 else -> updateViewState()
             }
-
             if (triggerNotify) {
-                stateUpdateListener?.onStateUpdated(state)
+                stateUpdateListener?.onStateUpdated(newState)
             }
-        }, DEFAULT_ANIMATION_DURATION)
+        }
+        val diff = System.currentTimeMillis() - startTime
+        if (currentState == LOADING) {
+            if (diff >= MIN_DELAY || startTime == -1L) {
+                post(stateChangeRunnable)
+            } else postDelayed(stateChangeRunnable, MIN_DELAY)
+        } else post(stateChangeRunnable)
+        currentState = newState
     }
 
 
     fun setupWithSwipeRefreshLayout(swipeRefreshLayout: SwipeRefreshLayout) {
         loadingView = swipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener { state = LOADING }
+        swipeRefreshLayout.setOnRefreshListener { currentState = LOADING }
     }
 
     private fun animateViewState() {
-
         val newActiveView: View = (
-                when (state) {
+                when (currentState) {
                     ERROR -> errorView
                     LOADING -> loadingView
                     SUCCESS -> successView
@@ -147,7 +179,7 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private fun updateViewState() {
         val newActiveView: View = (
-                when (state) {
+                when (currentState) {
                     ERROR -> errorView
                     LOADING -> loadingView
                     SUCCESS -> successView
@@ -161,10 +193,10 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private fun updateSwipeRefreshViewState() {
         val loadingView = this.loadingView as? SwipeRefreshLayout
-        loadingView?.isRefreshing = state == LOADING
-        if (state == SUCCESS) {
+        loadingView?.isRefreshing = currentState == LOADING
+        if (currentState == SUCCESS) {
             getInactiveAnimation(errorView!!, getActiveAnimation(successView)).start()
-        } else if (state == ERROR) {
+        } else if (currentState == ERROR) {
             getInactiveAnimation(successView, getActiveAnimation(errorView!!)).start()
         }
     }
@@ -174,7 +206,6 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         view.alpha = 0f
         view.bringToFront()
         return view.animate().alpha(1f)
-            .setStartDelay(DEFAULT_ANIMATION_DURATION)
             .setDuration(DEFAULT_ANIMATION_DURATION)
     }
 
@@ -183,7 +214,6 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
         activeAnimation: ViewPropertyAnimator
     ): ViewPropertyAnimator {
         return view.animate().alpha(0f)
-            .setStartDelay(DEFAULT_ANIMATION_DURATION)
             .setDuration(DEFAULT_ANIMATION_DURATION)
             .withEndAction {
                 view.visibility = View.GONE
@@ -212,7 +242,8 @@ class LazyLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     companion object {
-        private const val DEFAULT_ANIMATION_DURATION: Long = 250
+        private const val MIN_DELAY = 500L
+        private const val DEFAULT_ANIMATION_DURATION = 250L
         const val ERROR = -1
         const val LOADING = 0
         const val SUCCESS = 1
