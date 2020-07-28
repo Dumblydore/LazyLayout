@@ -136,7 +136,7 @@ class LazyLayout @JvmOverloads constructor(
         @State newState: Int, animate: Boolean = true,
         triggerNotify: Boolean = true
     ) {
-        stateChangeRunnable = Runnable {
+        val runnable = Runnable {
             startTime = if (state == LOADING) System.currentTimeMillis() else -1L
             when {
                 loadingView is SwipeRefreshLayout -> updateSwipeRefreshViewState()
@@ -150,9 +150,12 @@ class LazyLayout @JvmOverloads constructor(
         val diff = System.currentTimeMillis() - startTime
         if (currentState == LOADING) {
             if (diff >= MIN_DELAY || startTime == -1L) {
-                stateChangeRunnable?.run()
-            } else postDelayed(stateChangeRunnable, MIN_DELAY)
-        } else stateChangeRunnable?.run()
+                post(runnable)
+            } else {
+                stateChangeRunnable = runnable
+                postDelayed(runnable, MIN_DELAY)
+            }
+        } else post(runnable)
         currentState = newState
     }
 
