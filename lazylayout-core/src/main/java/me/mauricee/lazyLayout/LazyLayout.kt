@@ -136,6 +136,7 @@ class LazyLayout @JvmOverloads constructor(
         @State newState: Int, animate: Boolean = true,
         triggerNotify: Boolean = true
     ) {
+        if (currentState == newState) return
         val runnable = Runnable {
             startTime = if (state == LOADING) System.currentTimeMillis() else -1L
             when {
