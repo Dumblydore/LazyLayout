@@ -150,9 +150,9 @@ class LazyLayout @JvmOverloads constructor(
         val diff = System.currentTimeMillis() - startTime
         if (currentState == LOADING) {
             if (diff >= MIN_DELAY || startTime == -1L) {
-                post(stateChangeRunnable)
+                stateChangeRunnable?.run()
             } else postDelayed(stateChangeRunnable, MIN_DELAY)
-        } else post(stateChangeRunnable)
+        } else stateChangeRunnable?.run()
         currentState = newState
     }
 
